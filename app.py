@@ -41,34 +41,29 @@ def home():
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <style>
         *{margin:0;padding:0;box-sizing:border-box}
-        body{font-family:'Noto Nastaliq Urdu',sans-serif;background:linear-gradient(135deg,#0f0c29 0%,#302b63 50%,#24243e 100%);min-height:100vh;display:flex;justify-content:center;align-items:center;margin:0;padding:20px}
-        .card{background:linear-gradient(145deg,#1a1a2e,#16213e);border-radius:30px;padding:40px;max-width:500px;width:100%;box-shadow:0 20px 60px rgba(0,0,0,0.8),0 0 40px rgba(100,100,255,0.1);border:1px solid rgba(255,255,255,0.05)}
-        h1{color:#a78bfa;text-align:center;font-size:2.5rem;margin:0;text-shadow:0 0 20px rgba(167,139,250,0.3)}
-        h1 small{font-size:1rem;display:block;color:#94a3b8;margin-top:5px}
+        body{background:#0a0a0a;font-family:'Noto Nastaliq Urdu',sans-serif;min-height:100vh;display:flex;justify-content:center;align-items:center;padding:20px}
+        .card{background:#1a1a2e;border-radius:30px;padding:40px;max-width:500px;width:100%;box-shadow:0 20px 60px rgba(0,0,0,0.8)}
+        h1{color:#a78bfa;text-align:center;font-size:2.5rem}
+        h1 small{font-size:1rem;display:block;color:#94a3b8}
         .subtitle{text-align:center;color:#94a3b8;margin:10px 0 20px}
-        input{width:100%;padding:15px;font-size:1.5rem;border:2px solid #334155;border-radius:15px;margin:10px 0 20px;text-align:right;transition:0.3s;font-family:inherit;background:#1e293b;color:#e2e8f0}
-        input:focus{outline:none;border-color:#a78bfa;box-shadow:0 0 20px rgba(167,139,250,0.2)}
-        input::placeholder{color:#64748b}
-        button{width:100%;padding:15px;font-size:1.5rem;background:linear-gradient(135deg,#7c3aed,#6d28d9);color:white;border:none;border-radius:15px;cursor:pointer;transition:0.3s;font-family:inherit;box-shadow:0 4px 15px rgba(124,58,237,0.4)}
-        button:hover{transform:translateY(-2px);box-shadow:0 8px 25px rgba(124,58,237,0.5)}
-        .result{background:#1e293b;border-radius:15px;padding:20px;margin-top:20px;font-size:1.2rem;display:none;border:1px solid #334155}
+        input{width:100%;padding:15px;font-size:1.5rem;border:2px solid #333;border-radius:15px;margin:10px 0 20px;text-align:right;background:#0a0a0a;color:white}
+        input:focus{outline:none;border-color:#a78bfa}
+        button{width:100%;padding:15px;font-size:1.5rem;background:#7c3aed;color:white;border:none;border-radius:15px;cursor:pointer}
+        button:hover{background:#6d28d9}
+        .result{background:#0a0a0a;border-radius:15px;padding:20px;margin-top:20px;display:none;border:1px solid #333}
         .result.show{display:block}
-        .total{font-size:3rem;color:#a78bfa;text-align:center;font-weight:bold;text-shadow:0 0 30px rgba(167,139,250,0.3)}
+        .total{font-size:3rem;color:#a78bfa;text-align:center;font-weight:bold}
         .details{line-height:2;padding:10px 0;color:#e2e8f0}
-        .details span{color:#94a3b8}
-        .meaning{background:rgba(167,139,250,0.1);padding:15px;border-radius:10px;margin-top:10px;border-right:4px solid #7c3aed;color:#e2e8f0}
-        .whatsapp-btn{background:linear-gradient(135deg,#25D366,#128C7E);color:white;padding:12px;border-radius:10px;text-decoration:none;display:block;text-align:center;margin-top:15px;font-size:1.2rem;transition:0.3s;font-family:inherit;box-shadow:0 4px 15px rgba(37,211,102,0.3)}
-        .whatsapp-btn:hover{transform:translateY(-2px);box-shadow:0 8px 25px rgba(37,211,102,0.4)}
+        .meaning{background:rgba(167,139,250,0.1);padding:15px;border-radius:10px;margin-top:10px;color:#e2e8f0}
+        .whatsapp-btn{background:#25D366;color:white;padding:12px;border-radius:10px;text-decoration:none;display:block;text-align:center;margin-top:15px;font-size:1.2rem}
+        .whatsapp-btn:hover{background:#128C7E}
         .share-buttons{display:flex;gap:10px;margin-top:15px;flex-wrap:wrap}
-        .share-btn{flex:1;padding:10px;border:none;border-radius:10px;color:white;cursor:pointer;font-size:0.9rem;text-align:center;transition:0.3s;font-family:inherit;min-width:60px}
-        .share-btn:hover{transform:scale(1.05)}
+        .share-btn{flex:1;padding:10px;border:none;border-radius:10px;color:white;cursor:pointer;font-size:0.9rem;text-align:center;min-width:60px}
         .share-whatsapp{background:#25D366}
         .share-facebook{background:#1877F2}
         .share-twitter{background:#000}
         .share-copy{background:#7c3aed}
-        .footer{text-align:center;margin-top:20px;font-size:0.8rem;color:#64748b}
-        .footer span{color:#a78bfa}
-        .loading{color:#94a3b8;text-align:center;padding:10px}
+        .footer{text-align:center;margin-top:20px;color:#64748b}
     </style>
     </head>
     <body>
@@ -82,23 +77,20 @@ def home():
             📱 مکمل رپورٹ (PKR 500) - WhatsApp پر رابطہ کریں
         </a>
         <div class="share-buttons">
-            <button onclick="shareWhatsApp()" class="share-btn share-whatsapp">📱 شیئر کریں</button>
+            <button onclick="shareWhatsApp()" class="share-btn share-whatsapp">📱 شیئر</button>
             <button onclick="shareFacebook()" class="share-btn share-facebook">📘</button>
             <button onclick="shareTwitter()" class="share-btn share-twitter">🐦</button>
-            <button onclick="copyLink()" class="share-btn share-copy">📋 لنک کاپی کریں</button>
+            <button onclick="copyLink()" class="share-btn share-copy">📋 لنک</button>
         </div>
         <div class="footer">🔮 اپنے دوستوں کے نام بھی چیک کروائیں</div>
     </div>
     <script>
     async function calculate() {
         const name = document.getElementById('name').value.trim();
-        if(!name) {
-            alert('براہ کرم نام لکھیں');
-            return;
-        }
+        if(!name) { alert('براہ کرم نام لکھیں'); return; }
         const resultDiv = document.getElementById('result');
         resultDiv.className = 'result show';
-        resultDiv.innerHTML = '<div class="loading">⏳ حساب لگ رہا ہے...</div>';
+        resultDiv.innerHTML = '⏳ حساب لگ رہا ہے...';
         try {
             const res = await fetch('/api/' + encodeURIComponent(name));
             const data = await res.json();
@@ -108,31 +100,24 @@ def home():
                 <div class="meaning">🧠 ${data.meaning}</div>
             `;
         } catch(e) {
-            resultDiv.innerHTML = '<div style="color:#f87171;">❌ Error: ' + e.message + '</div>';
+            resultDiv.innerHTML = '❌ Error: ' + e.message;
         }
     }
     document.getElementById('name').addEventListener('keypress', function(e) {
         if(e.key === 'Enter') calculate();
     });
     function shareWhatsApp() {
-        const url = window.location.href;
-        window.open('https://wa.me/923120497193?text=' + encodeURIComponent('🔮 اپنا عدد نام چیک کریں! ' + url), '_blank');
+        window.open('https://wa.me/923120497193?text=' + encodeURIComponent('🔮 اپنا عدد نام چیک کریں! ' + window.location.href));
     }
     function shareFacebook() {
-        const url = window.location.href;
-        window.open('https://www.facebook.com/sharer/sharer.php?u=' + encodeURIComponent(url), '_blank');
+        window.open('https://www.facebook.com/sharer/sharer.php?u=' + encodeURIComponent(window.location.href));
     }
     function shareTwitter() {
-        const url = window.location.href;
-        window.open('https://twitter.com/intent/tweet?text=' + encodeURIComponent('🔮 اپنا عدد نام چیک کریں!') + '&url=' + encodeURIComponent(url), '_blank');
+        window.open('https://twitter.com/intent/tweet?text=' + encodeURIComponent('🔮 اپنا عدد نام چیک کریں!') + '&url=' + encodeURIComponent(window.location.href));
     }
     function copyLink() {
-        const url = window.location.href;
-        navigator.clipboard.writeText(url).then(function() {
-            alert('✅ لنک کاپی ہو گیا!');
-        }).catch(function() {
-            alert('❌ لنک کاپی کرنے میں مشکل ہو رہی ہے');
-        });
+        navigator.clipboard.writeText(window.location.href);
+        alert('✅ لنک کاپی ہو گیا!');
     }
     </script>
     </body>
