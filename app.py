@@ -1,6 +1,5 @@
 from flask import Flask, request, jsonify, send_file
 import io
-import re
 from reportlab.lib.pagesizes import A4
 from reportlab.pdfgen import canvas
 from reportlab.lib.units import inch
@@ -8,7 +7,6 @@ from reportlab.lib import colors
 from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer, Table, TableStyle
 from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
 from reportlab.lib.enums import TA_CENTER, TA_RIGHT
-import os
 
 app = Flask(__name__)
 
@@ -20,15 +18,15 @@ abjad = {
 }
 
 meanings = {
-    1: "🏆 رہنما — خود اعتماد، باصلاحیت، آزاد مزاج",
-    2: "🤝 دوست — نرم دل، محبت کرنے والا، تعاون پسند",
-    3: "🎨 تخلیقی — فنکار، مزاحیہ، خوش مزاج",
-    4: "🏗️ محنتی — مضبوط، قابل اعتماد، منظم",
-    5: "🌊 آزاد — سفر پسند، تجسس خور، تیز",
-    6: "❤️ محبت کرنے والا — ذمہ دار، شفیق، خاندانی",
-    7: "🔍 فلسفی — گہرا، خاموش، علم دوست",
-    8: "💰 کامیاب — طاقتور، امیر، بااثر",
-    9: "🌟 انسان دوست — فیاض، مثالی، بلند نظر"
+    1: "رہنما — خود اعتماد، باصلاحیت، آزاد مزاج",
+    2: "دوست — نرم دل، محبت کرنے والا، تعاون پسند",
+    3: "تخلیقی — فنکار، مزاحیہ، خوش مزاج",
+    4: "محنتی — مضبوط، قابل اعتماد، منظم",
+    5: "آزاد — سفر پسند، تجسس خور، تیز",
+    6: "محبت کرنے والا — ذمہ دار، شفیق، خاندانی",
+    7: "فلسفی — گہرا، خاموش، علم دوست",
+    8: "کامیاب — طاقتور، امیر، بااثر",
+    9: "انسان دوست — فیاض، مثالی، بلند نظر"
 }
 
 lucky_data = {
@@ -64,14 +62,13 @@ def calculate(name):
         total += val
     while total > 9 and total not in [11, 22, 33]:
         total = sum(int(d) for d in str(total))
-    return details, total, meanings.get(total, "✨ خاص عدد — آپ منفرد ہیں!")
+    return details, total, meanings.get(total, "خاص عدد — آپ منفرد ہیں!")
 
 def generate_pdf(name, total, meaning):
     buffer = io.BytesIO()
     doc = SimpleDocTemplate(buffer, pagesize=A4)
     styles = getSampleStyleSheet()
     
-    # Urdu font support
     styles.add(ParagraphStyle(name='UrduTitle', fontName='Helvetica', fontSize=24, alignment=TA_CENTER, textColor=colors.HexColor('#7c3aed')))
     styles.add(ParagraphStyle(name='UrduBody', fontName='Helvetica', fontSize=14, alignment=TA_RIGHT))
     styles.add(ParagraphStyle(name='UrduCenter', fontName='Helvetica', fontSize=14, alignment=TA_CENTER))
@@ -80,37 +77,24 @@ def generate_pdf(name, total, meaning):
     
     story = []
     
-    # Title
     story.append(Paragraph("🌟 عدد نام کی مکمل رپورٹ 🌟", styles['UrduTitle']))
     story.append(Spacer(1, 20))
-    
-    # Name and Number
     story.append(Paragraph(f"📛 نام: {name}", styles['UrduBody']))
     story.append(Paragraph(f"🔢 عدد: {total}", styles['UrduBody']))
     story.append(Spacer(1, 20))
-    
-    # Personality
     story.append(Paragraph("📊 شخصیت کی تحلیل:", styles['UrduBody']))
     story.append(Paragraph(f"🧠 {meaning}", styles['UrduBody']))
     story.append(Spacer(1, 20))
-    
-    # Lucky Information
     story.append(Paragraph("📅 خوش قسمت دن: " + lucky.get('day', 'N/A'), styles['UrduBody']))
     story.append(Paragraph("🎨 خوش قسمت رنگ: " + lucky.get('color', 'N/A'), styles['UrduBody']))
     story.append(Paragraph("💎 خوش قسمت پتھر: " + lucky.get('gem', 'N/A'), styles['UrduBody']))
     story.append(Paragraph("🔮 خوش قسمت نمبرز: " + lucky.get('numbers', 'N/A'), styles['UrduBody']))
     story.append(Spacer(1, 20))
-    
-    # Compatibility
     compat = compatibility.get(total, "N/A")
     story.append(Paragraph(f"👫 پارٹنر کی مناسبت: {compat}", styles['UrduBody']))
     story.append(Spacer(1, 20))
-    
-    # Business Advice
     story.append(Paragraph(f"💼 کاروبار کے لیے تجاویز: {lucky.get('business', 'N/A')}", styles['UrduBody']))
     story.append(Spacer(1, 30))
-    
-    # Footer
     story.append(Paragraph("🌟━━━━━━━━━━━━━━━━━━━━━━━━━━🌟", styles['UrduCenter']))
     story.append(Paragraph("شکریہ! 🌹", styles['UrduCenter']))
     
@@ -143,7 +127,7 @@ def home():
         .meaning{background:rgba(167,139,250,0.1);padding:15px;border-radius:10px;margin-top:10px;color:#e2e8f0}
         .whatsapp-btn{background:#25D366;color:white;padding:12px;border-radius:10px;text-decoration:none;display:block;text-align:center;margin-top:15px;font-size:1.2rem}
         .whatsapp-btn:hover{background:#128C7E}
-        .download-btn{background:#f59e0b;color:white;padding:12px;border-radius:10px;text-decoration:none;display:block;text-align:center;margin-top:10px;font-size:1.2rem}
+        .download-btn{background:#f59e0b;color:white;padding:12px;border-radius:10px;text-decoration:none;display:block;text-align:center;margin-top:10px;font-size:1.2rem;cursor:pointer;border:none;width:100%}
         .download-btn:hover{background:#d97706}
         .share-buttons{display:flex;gap:10px;margin-top:15px;flex-wrap:wrap}
         .share-btn{flex:1;padding:10px;border:none;border-radius:10px;color:white;cursor:pointer;font-size:0.9rem;text-align:center;min-width:60px}
@@ -155,6 +139,7 @@ def home():
         .payment-info{background:rgba(245,158,11,0.1);border:1px solid #f59e0b;border-radius:10px;padding:15px;margin-top:15px}
         .payment-info h3{color:#f59e0b;text-align:center}
         .payment-info p{color:#94a3b8;text-align:center;margin:5px 0}
+        .hidden{display:none}
     </style>
     </head>
     <body>
@@ -164,7 +149,7 @@ def home():
         <input id="name" placeholder="مثال: علی" />
         <button onclick="calculate()">🔮 شمار کریں</button>
         <div class="result" id="result"></div>
-        <div id="reportButtons" style="display:none">
+        <div id="reportButtons" class="hidden">
             <button onclick="downloadReport()" class="download-btn">📄 مکمل رپورٹ ڈاؤن لوڈ کریں (PKR 500)</button>
             <div class="payment-info">
                 <h3>💰 ادائیگی کی معلومات</h3>
@@ -206,7 +191,7 @@ def home():
                 <div class="details">${data.details.join('<br>')}</div>
                 <div class="meaning">🧠 ${data.meaning}</div>
             `;
-            document.getElementById('reportButtons').style.display = 'block';
+            document.getElementById('reportButtons').className = '';
         } catch(e) {
             resultDiv.innerHTML = '❌ Error: ' + e.message;
         }
@@ -250,7 +235,7 @@ def api(name):
 @app.route('/download/<name>/<int:total>/<meaning>')
 def download_report(name, total, meaning):
     pdf_buffer = generate_pdf(name, total, meaning)
-    return send_file(pdf_buffer, as_attachment=True, download_name=f"report_{name}.pdf", mimetype='application/pdf')
+    return send_file(pdf_buffer, as_attachment=True, download_name=f"{name}_report.pdf", mimetype='application/pdf')
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000)
