@@ -1,5 +1,4 @@
 from flask import Flask, request, jsonify
-import os
 
 app = Flask(__name__)
 
@@ -43,24 +42,23 @@ def home():
     <style>
         *{margin:0;padding:0;box-sizing:border-box}
         body{font-family:'Noto Nastaliq Urdu',sans-serif;background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);min-height:100vh;display:flex;justify-content:center;align-items:center;margin:0;padding:20px}
-        .card{background:white;border-radius:30px;padding:40px;max-width:500px;width:100%;box-shadow:0 20px 60px rgba(0,0,0,0.3);animation:fadeIn 0.5s}
-        @keyframes fadeIn{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+        .card{background:white;border-radius:30px;padding:40px;max-width:500px;width:100%;box-shadow:0 20px 60px rgba(0,0,0,0.3)}
         h1{color:#764ba2;text-align:center;font-size:2.5rem;margin:0}
         h1 small{font-size:1rem;display:block;color:#999;margin-top:5px}
         .subtitle{text-align:center;color:#666;margin:10px 0 20px}
-        input{width:100%;padding:15px;font-size:1.5rem;border:2px solid #ddd;border-radius:15px;margin:10px 0 20px;text-align:right;transition:0.3s;font-family:inherit}
-        input:focus{outline:none;border-color:#764ba2;box-shadow:0 0 10px rgba(118,75,162,0.2)}
-        button{width:100%;padding:15px;font-size:1.5rem;background:#764ba2;color:white;border:none;border-radius:15px;cursor:pointer;transition:0.3s;font-family:inherit}
-        button:hover{background:#667eea;transform:scale(1.02)}
+        input{width:100%;padding:15px;font-size:1.5rem;border:2px solid #ddd;border-radius:15px;margin:10px 0 20px;text-align:right}
+        input:focus{outline:none;border-color:#764ba2}
+        button{width:100%;padding:15px;font-size:1.5rem;background:#764ba2;color:white;border:none;border-radius:15px;cursor:pointer}
+        button:hover{background:#667eea}
         .result{background:#f8f9fa;border-radius:15px;padding:20px;margin-top:20px;font-size:1.2rem;display:none}
         .result.show{display:block}
         .total{font-size:3rem;color:#764ba2;text-align:center;font-weight:bold}
         .details{line-height:2;padding:10px 0}
-        .meaning{background:#e8f5e9;padding:15px;border-radius:10px;margin-top:10px;border-right:4px solid #4CAF50}
-        .whatsapp-btn{background:#25D366;color:white;padding:12px;border-radius:10px;text-decoration:none;display:block;text-align:center;margin-top:15px;font-size:1.2rem;transition:0.3s;font-family:inherit}
-        .whatsapp-btn:hover{background:#128C7E;transform:scale(1.02)}
+        .meaning{background:#e8f5e9;padding:15px;border-radius:10px;margin-top:10px}
+        .whatsapp-btn{background:#25D366;color:white;padding:12px;border-radius:10px;text-decoration:none;display:block;text-align:center;margin-top:15px;font-size:1.2rem}
+        .whatsapp-btn:hover{background:#128C7E}
         .share-buttons{display:flex;gap:10px;margin-top:15px;flex-wrap:wrap}
-        .share-btn{flex:1;padding:10px;border:none;border-radius:10px;color:white;cursor:pointer;font-size:0.9rem;transition:0.3s;font-family:inherit;text-decoration:none;text-align:center}
+        .share-btn{flex:1;padding:10px;border:none;border-radius:10px;color:white;cursor:pointer;font-size:0.9rem;text-align:center}
         .share-btn:hover{transform:scale(1.05)}
         .share-whatsapp{background:#25D366}
         .share-facebook{background:#1877F2}
@@ -75,18 +73,14 @@ def home():
         <p class="subtitle">اپنا نام لکھیں اور اپنا عدد معلوم کریں</p>
         <input id="name" placeholder="مثال: علی" />
         <button onclick="calculate()">🔮 شمار کریں</button>
-        <div class="result" id="result">
-            <div class="total" id="total"></div>
-            <div class="details" id="details"></div>
-            <div class="meaning" id="meaning"></div>
-        </div>
+        <div class="result" id="result"></div>
         <a href="https://wa.me/923120497193?text=مجھے%20مکمل%20رپورٹ%20چاہیے" class="whatsapp-btn">
             📱 مکمل رپورٹ (PKR 500) - WhatsApp پر رابطہ کریں
         </a>
         <div class="share-buttons">
-            <a href="#" onclick="shareWhatsApp()" class="share-btn share-whatsapp">📱 شیئر کریں</a>
-            <a href="#" onclick="shareFacebook()" class="share-btn share-facebook">📘</a>
-            <a href="#" onclick="shareTwitter()" class="share-btn share-twitter">🐦</a>
+            <button onclick="shareWhatsApp()" class="share-btn share-whatsapp">📱 شیئر کریں</button>
+            <button onclick="shareFacebook()" class="share-btn share-facebook">📘</button>
+            <button onclick="shareTwitter()" class="share-btn share-twitter">🐦</button>
             <button onclick="copyLink()" class="share-btn share-copy">📋 لنک کاپی کریں</button>
         </div>
         <div class="footer">🔮 اپنے دوستوں کے نام بھی چیک کروائیں</div>
@@ -100,9 +94,9 @@ def home():
         }
         const resultDiv = document.getElementById('result');
         resultDiv.className = 'result show';
-        resultDiv.innerHTML = '<div class="loading">⏳ حساب لگ رہا ہے...</div>';
+        resultDiv.innerHTML = '⏳ حساب لگ رہا ہے...';
         try {
-            const res = await fetch('/api/'+encodeURIComponent(name));
+            const res = await fetch('/api/' + encodeURIComponent(name));
             const data = await res.json();
             resultDiv.innerHTML = `
                 <div class="total">${data.total}</div>
@@ -110,21 +104,20 @@ def home():
                 <div class="meaning">🧠 ${data.meaning}</div>
             `;
         } catch(e) {
-            resultDiv.innerHTML = '<div style="color:red;">❌ Error: '+e.message+'</div>';
+            resultDiv.innerHTML = '❌ Error: ' + e.message;
         }
     }
     document.getElementById('name').addEventListener('keypress', function(e) {
         if(e.key === 'Enter') calculate();
     });
     function shareWhatsApp() {
-        const url = window.location.href;
-        window.open('https://wa.me/?text='+encodeURIComponent('🔮 اپنا عدد نام چیک کریں! '+url), '_blank');
+        window.open('https://wa.me/?text=' + encodeURIComponent('🔮 اپنا عدد نام چیک کریں! ' + window.location.href));
     }
     function shareFacebook() {
-        window.open('https://facebook.com/sharer/sharer.php?u='+encodeURIComponent(window.location.href), '_blank');
+        window.open('https://facebook.com/sharer/sharer.php?u=' + encodeURIComponent(window.location.href));
     }
     function shareTwitter() {
-        window.open('https://twitter.com/intent/tweet?text='+encodeURIComponent('🔮 اپنا عدد نام چیک کریں!')+'&url='+encodeURIComponent(window.location.href), '_blank');
+        window.open('https://twitter.com/intent/tweet?text=' + encodeURIComponent('🔮 اپنا عدد نام چیک کریں! ' + window.location.href));
     }
     function copyLink() {
         navigator.clipboard.writeText(window.location.href);
