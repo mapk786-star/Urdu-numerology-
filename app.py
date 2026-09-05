@@ -8,13 +8,14 @@ from reportlab.lib import colors
 
 app = Flask(__name__)
 
-# ---------- ABJAD NUMBERS (URDU) ----------
+# ---------- URDU ABJAD NUMBERS ----------
 abjad = {
     'ا':1,'ب':2,'ج':3,'د':4,'ہ':5,'و':6,'ز':7,'ح':8,'ط':9,'ی':10,
     'ك':20,'ل':30,'م':40,'ن':50,'س':60,'ع':70,'ف':80,'ص':90,'ق':100,
     'ر':200,'ش':300,'ت':400,'ث':500,'خ':600,'ذ':700,'ض':800,'ظ':900,'غ':1000
 }
 
+# ---------- URDU MEANINGS ----------
 meanings = {
     1: "رہنما — خود اعتماد، باصلاحیت، آزاد مزاج",
     2: "دوست — نرم دل، محبت کرنے والا، تعاون پسند",
@@ -27,6 +28,7 @@ meanings = {
     9: "انسان دوست — فیاض، مثالی، بلند نظر"
 }
 
+# ---------- URDU LUCKY DATA ----------
 lucky_data = {
     1: {"day": "جمعہ, اتوار", "color": "سرخ, نارنجی", "gem": "روبی", "numbers": "1, 10, 19, 28", "business": "لیڈرشپ والے کاروبار"},
     2: {"day": "پیر, جمعرات", "color": "سفید, چاندی", "gem": "موتی", "numbers": "2, 11, 20, 29", "business": "پارٹنرشپ"},
@@ -39,19 +41,21 @@ lucky_data = {
     9: {"day": "جمعرات, جمعہ", "color": "سنہری, نارنجی", "gem": "پکھراج", "numbers": "9, 18, 27, 36", "business": "خیراتی/خدمات"}
 }
 
+# ---------- URDU COMPATIBILITY ----------
 compatibility = {
     1: "1, 3, 5, 9", 2: "2, 4, 6, 8", 3: "1, 3, 5, 9",
     4: "2, 4, 6, 8", 5: "1, 3, 5, 9", 6: "2, 4, 6, 8",
     7: "1, 3, 5, 9", 8: "2, 4, 6, 8", 9: "1, 3, 5, 9"
 }
 
-# ---------- ENGLISH NUMEROLOGY (PYTHAGOREAN) ----------
+# ---------- ENGLISH PYTHAGOREAN VALUES ----------
 english_values = {
     'a':1,'b':2,'c':3,'d':4,'e':5,'f':6,'g':7,'h':8,'i':9,
     'j':1,'k':2,'l':3,'m':4,'n':5,'o':6,'p':7,'q':8,'r':9,
     's':1,'t':2,'u':3,'v':4,'w':5,'x':6,'y':7,'z':8
 }
 
+# ---------- ENGLISH MEANINGS ----------
 english_meanings = {
     1: "Leader — Confident, ambitious, independent",
     2: "Peacemaker — Diplomatic, sensitive, cooperative",
@@ -64,6 +68,7 @@ english_meanings = {
     9: "Humanitarian — Generous, idealistic, compassionate"
 }
 
+# ---------- ENGLISH LUCKY DATA ----------
 english_lucky = {
     1: {"day": "Sunday, Friday", "color": "Red, Orange", "gem": "Ruby", "numbers": "1,10,19,28", "business": "Leadership roles"},
     2: {"day": "Monday, Thursday", "color": "White, Silver", "gem": "Pearl", "numbers": "2,11,20,29", "business": "Partnerships"},
@@ -76,6 +81,7 @@ english_lucky = {
     9: {"day": "Thursday, Friday", "color": "Gold, Orange", "gem": "Topaz", "numbers": "9,18,27,36", "business": "Charity/Services"}
 }
 
+# ---------- ENGLISH COMPATIBILITY ----------
 english_compatibility = {
     1: "1, 3, 5, 9", 2: "2, 4, 6, 8", 3: "1, 3, 5, 9",
     4: "2, 4, 6, 8", 5: "1, 3, 5, 9", 6: "2, 4, 6, 8",
@@ -102,7 +108,7 @@ def calculate(name, system='urdu'):
                 details.append(f"{char} = {val}")
                 total += val
     
-    # Reduce to single digit (keep master numbers)
+    # Reduce to single digit (keep master numbers 11, 22, 33)
     while total > 9 and total not in [11, 22, 33]:
         total = sum(int(d) for d in str(total))
     
@@ -123,10 +129,11 @@ def generate_pdf(name, total, meaning, system='urdu'):
     styles.add(ParagraphStyle(name='Body', fontName='Helvetica', fontSize=14, alignment=TA_RIGHT if system=='urdu' else TA_CENTER))
     styles.add(ParagraphStyle(name='Center', fontName='Helvetica', fontSize=14, alignment=TA_CENTER))
     
+    story = []
+    
     if system == 'urdu':
         lucky = lucky_data.get(total, {})
         compat = compatibility.get(total, 'N/A')
-        story = []
         story.append(Paragraph("🌟 عدد نام کی مکمل رپورٹ 🌟", styles['Title']))
         story.append(Spacer(1, 20))
         story.append(Paragraph(f"📛 نام: {name}", styles['Body']))
@@ -148,7 +155,6 @@ def generate_pdf(name, total, meaning, system='urdu'):
     else:
         lucky = english_lucky.get(total, {})
         compat = english_compatibility.get(total, 'N/A')
-        story = []
         story.append(Paragraph("🌟 Complete Numerology Report 🌟", styles['Title']))
         story.append(Spacer(1, 20))
         story.append(Paragraph(f"📛 Name: {name}", styles['Center']))
