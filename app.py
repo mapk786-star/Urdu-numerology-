@@ -1,12 +1,10 @@
 from flask import Flask, request, jsonify, send_file
 import io
 from reportlab.lib.pagesizes import A4
-from reportlab.pdfgen import canvas
-from reportlab.lib.units import inch
-from reportlab.lib import colors
-from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer, Table, TableStyle
+from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer
 from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
 from reportlab.lib.enums import TA_CENTER, TA_RIGHT
+from reportlab.lib import colors
 
 app = Flask(__name__)
 
@@ -42,15 +40,9 @@ lucky_data = {
 }
 
 compatibility = {
-    1: "1, 3, 5, 9",
-    2: "2, 4, 6, 8",
-    3: "1, 3, 5, 9",
-    4: "2, 4, 6, 8",
-    5: "1, 3, 5, 9",
-    6: "2, 4, 6, 8",
-    7: "1, 3, 5, 9",
-    8: "2, 4, 6, 8",
-    9: "1, 3, 5, 9"
+    1: "1, 3, 5, 9", 2: "2, 4, 6, 8", 3: "1, 3, 5, 9",
+    4: "2, 4, 6, 8", 5: "1, 3, 5, 9", 6: "2, 4, 6, 8",
+    7: "1, 3, 5, 9", 8: "2, 4, 6, 8", 9: "1, 3, 5, 9"
 }
 
 def calculate(name):
@@ -68,15 +60,12 @@ def generate_pdf(name, total, meaning):
     buffer = io.BytesIO()
     doc = SimpleDocTemplate(buffer, pagesize=A4)
     styles = getSampleStyleSheet()
-    
     styles.add(ParagraphStyle(name='UrduTitle', fontName='Helvetica', fontSize=24, alignment=TA_CENTER, textColor=colors.HexColor('#7c3aed')))
     styles.add(ParagraphStyle(name='UrduBody', fontName='Helvetica', fontSize=14, alignment=TA_RIGHT))
     styles.add(ParagraphStyle(name='UrduCenter', fontName='Helvetica', fontSize=14, alignment=TA_CENTER))
     
     lucky = lucky_data.get(total, {})
-    
     story = []
-    
     story.append(Paragraph("🌟 عدد نام کی مکمل رپورٹ 🌟", styles['UrduTitle']))
     story.append(Spacer(1, 20))
     story.append(Paragraph(f"📛 نام: {name}", styles['UrduBody']))
@@ -90,8 +79,7 @@ def generate_pdf(name, total, meaning):
     story.append(Paragraph("💎 خوش قسمت پتھر: " + lucky.get('gem', 'N/A'), styles['UrduBody']))
     story.append(Paragraph("🔮 خوش قسمت نمبرز: " + lucky.get('numbers', 'N/A'), styles['UrduBody']))
     story.append(Spacer(1, 20))
-    compat = compatibility.get(total, "N/A")
-    story.append(Paragraph(f"👫 پارٹنر کی مناسبت: {compat}", styles['UrduBody']))
+    story.append(Paragraph(f"👫 پارٹنر کی مناسبت: {compatibility.get(total, 'N/A')}", styles['UrduBody']))
     story.append(Spacer(1, 20))
     story.append(Paragraph(f"💼 کاروبار کے لیے تجاویز: {lucky.get('business', 'N/A')}", styles['UrduBody']))
     story.append(Spacer(1, 30))
@@ -170,10 +158,7 @@ def home():
         <div class="footer">🔮 اپنے دوستوں کے نام بھی چیک کروائیں</div>
     </div>
     <script>
-    let currentName = '';
-    let currentTotal = 0;
-    let currentMeaning = '';
-
+    let currentName = '', currentTotal = 0, currentMeaning = '';
     async function calculate() {
         const name = document.getElementById('name').value.trim();
         if(!name) { alert('براہ کرم نام لکھیں'); return; }
@@ -196,19 +181,13 @@ def home():
             resultDiv.innerHTML = '❌ Error: ' + e.message;
         }
     }
-
     function downloadReport() {
-        if(!currentName) {
-            alert('براہ کرم پہلے نام چیک کریں');
-            return;
-        }
+        if(!currentName) { alert('براہ کرم پہلے نام چیک کریں'); return; }
         window.open('/download/' + encodeURIComponent(currentName) + '/' + currentTotal + '/' + encodeURIComponent(currentMeaning));
     }
-
     document.getElementById('name').addEventListener('keypress', function(e) {
         if(e.key === 'Enter') calculate();
     });
-
     function shareWhatsApp() {
         window.open('https://wa.me/923120497193?text=' + encodeURIComponent('🔮 اپنا عدد نام چیک کریں! ' + window.location.href));
     }
