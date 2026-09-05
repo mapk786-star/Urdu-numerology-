@@ -80,7 +80,7 @@ def home():
             <div class="details" id="details"></div>
             <div class="meaning" id="meaning"></div>
         </div>
-        <a href="https://wa.me/923001234567?text=مجھے%20مکمل%20رپورٹ%20چاہیے" class="whatsapp-btn">
+        <a href="https://wa.me/923120497193?text=مجھے%20مکمل%20رپورٹ%20چاہیے" class="whatsapp-btn">
             📱 مکمل رپورٹ (PKR 500) - WhatsApp پر رابطہ کریں
         </a>
         <div class="share-buttons">
