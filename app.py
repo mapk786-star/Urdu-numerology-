@@ -111,7 +111,7 @@ def home():
         if(e.key === 'Enter') calculate();
     });
     function shareWhatsApp() {
-        window.open('https://wa.me/?text=' + encodeURIComponent('🔮 اپنا عدد نام چیک کریں! ' + window.location.href));
+        window.open('https://wa.me/923120497193?text=' + encodeURIComponent('🔮 اپنا عدد نام چیک کریں! ' + window.location.href));
     }
     function shareFacebook() {
         window.open('https://facebook.com/sharer/sharer.php?u=' + encodeURIComponent(window.location.href));
