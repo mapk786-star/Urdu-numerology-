@@ -1,2 +1,2 @@
-flask
-reportlab
+Flask==2.3.3
+reportlab==4.0.4
