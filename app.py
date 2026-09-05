@@ -41,7 +41,7 @@ def home():
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <style>
         *{margin:0;padding:0;box-sizing:border-box}
-        body{background:#0a0a0a;font-family:'Noto Nastaliq Urdu',sans-serif;min-height:100vh;display:flex;justify-content:center;align-items:center;padding:20px}
+        body{background:#0a0a0a;color:white;font-family:'Noto Nastaliq Urdu',sans-serif;min-height:100vh;display:flex;justify-content:center;align-items:center;padding:20px}
         .card{background:#1a1a2e;border-radius:30px;padding:40px;max-width:500px;width:100%;box-shadow:0 20px 60px rgba(0,0,0,0.8)}
         h1{color:#a78bfa;text-align:center;font-size:2.5rem}
         h1 small{font-size:1rem;display:block;color:#94a3b8}
