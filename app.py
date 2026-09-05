@@ -41,30 +41,34 @@ def home():
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <style>
         *{margin:0;padding:0;box-sizing:border-box}
-        body{font-family:'Noto Nastaliq Urdu',sans-serif;background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);min-height:100vh;display:flex;justify-content:center;align-items:center;margin:0;padding:20px}
-        .card{background:white;border-radius:30px;padding:40px;max-width:500px;width:100%;box-shadow:0 20px 60px rgba(0,0,0,0.3)}
-        h1{color:#764ba2;text-align:center;font-size:2.5rem;margin:0}
-        h1 small{font-size:1rem;display:block;color:#999;margin-top:5px}
-        .subtitle{text-align:center;color:#666;margin:10px 0 20px}
-        input{width:100%;padding:15px;font-size:1.5rem;border:2px solid #ddd;border-radius:15px;margin:10px 0 20px;text-align:right}
-        input:focus{outline:none;border-color:#764ba2}
-        button{width:100%;padding:15px;font-size:1.5rem;background:#764ba2;color:white;border:none;border-radius:15px;cursor:pointer;transition:0.3s}
-        button:hover{background:#667eea}
-        .result{background:#f8f9fa;border-radius:15px;padding:20px;margin-top:20px;font-size:1.2rem;display:none}
+        body{font-family:'Noto Nastaliq Urdu',sans-serif;background:linear-gradient(135deg,#0f0c29 0%,#302b63 50%,#24243e 100%);min-height:100vh;display:flex;justify-content:center;align-items:center;margin:0;padding:20px}
+        .card{background:linear-gradient(145deg,#1a1a2e,#16213e);border-radius:30px;padding:40px;max-width:500px;width:100%;box-shadow:0 20px 60px rgba(0,0,0,0.8),0 0 40px rgba(100,100,255,0.1);border:1px solid rgba(255,255,255,0.05)}
+        h1{color:#a78bfa;text-align:center;font-size:2.5rem;margin:0;text-shadow:0 0 20px rgba(167,139,250,0.3)}
+        h1 small{font-size:1rem;display:block;color:#94a3b8;margin-top:5px}
+        .subtitle{text-align:center;color:#94a3b8;margin:10px 0 20px}
+        input{width:100%;padding:15px;font-size:1.5rem;border:2px solid #334155;border-radius:15px;margin:10px 0 20px;text-align:right;transition:0.3s;font-family:inherit;background:#1e293b;color:#e2e8f0}
+        input:focus{outline:none;border-color:#a78bfa;box-shadow:0 0 20px rgba(167,139,250,0.2)}
+        input::placeholder{color:#64748b}
+        button{width:100%;padding:15px;font-size:1.5rem;background:linear-gradient(135deg,#7c3aed,#6d28d9);color:white;border:none;border-radius:15px;cursor:pointer;transition:0.3s;font-family:inherit;box-shadow:0 4px 15px rgba(124,58,237,0.4)}
+        button:hover{transform:translateY(-2px);box-shadow:0 8px 25px rgba(124,58,237,0.5)}
+        .result{background:#1e293b;border-radius:15px;padding:20px;margin-top:20px;font-size:1.2rem;display:none;border:1px solid #334155}
         .result.show{display:block}
-        .total{font-size:3rem;color:#764ba2;text-align:center;font-weight:bold}
-        .details{line-height:2;padding:10px 0}
-        .meaning{background:#e8f5e9;padding:15px;border-radius:10px;margin-top:10px}
-        .whatsapp-btn{background:#25D366;color:white;padding:12px;border-radius:10px;text-decoration:none;display:block;text-align:center;margin-top:15px;font-size:1.2rem;transition:0.3s}
-        .whatsapp-btn:hover{background:#128C7E}
+        .total{font-size:3rem;color:#a78bfa;text-align:center;font-weight:bold;text-shadow:0 0 30px rgba(167,139,250,0.3)}
+        .details{line-height:2;padding:10px 0;color:#e2e8f0}
+        .details span{color:#94a3b8}
+        .meaning{background:rgba(167,139,250,0.1);padding:15px;border-radius:10px;margin-top:10px;border-right:4px solid #7c3aed;color:#e2e8f0}
+        .whatsapp-btn{background:linear-gradient(135deg,#25D366,#128C7E);color:white;padding:12px;border-radius:10px;text-decoration:none;display:block;text-align:center;margin-top:15px;font-size:1.2rem;transition:0.3s;font-family:inherit;box-shadow:0 4px 15px rgba(37,211,102,0.3)}
+        .whatsapp-btn:hover{transform:translateY(-2px);box-shadow:0 8px 25px rgba(37,211,102,0.4)}
         .share-buttons{display:flex;gap:10px;margin-top:15px;flex-wrap:wrap}
-        .share-btn{flex:1;padding:10px;border:none;border-radius:10px;color:white;cursor:pointer;font-size:0.9rem;text-align:center;transition:0.3s}
+        .share-btn{flex:1;padding:10px;border:none;border-radius:10px;color:white;cursor:pointer;font-size:0.9rem;text-align:center;transition:0.3s;font-family:inherit;min-width:60px}
         .share-btn:hover{transform:scale(1.05)}
         .share-whatsapp{background:#25D366}
         .share-facebook{background:#1877F2}
         .share-twitter{background:#000}
-        .share-copy{background:#764ba2}
-        .footer{text-align:center;margin-top:20px;font-size:0.8rem;color:#999}
+        .share-copy{background:#7c3aed}
+        .footer{text-align:center;margin-top:20px;font-size:0.8rem;color:#64748b}
+        .footer span{color:#a78bfa}
+        .loading{color:#94a3b8;text-align:center;padding:10px}
     </style>
     </head>
     <body>
@@ -94,7 +98,7 @@ def home():
         }
         const resultDiv = document.getElementById('result');
         resultDiv.className = 'result show';
-        resultDiv.innerHTML = '⏳ حساب لگ رہا ہے...';
+        resultDiv.innerHTML = '<div class="loading">⏳ حساب لگ رہا ہے...</div>';
         try {
             const res = await fetch('/api/' + encodeURIComponent(name));
             const data = await res.json();
@@ -104,7 +108,7 @@ def home():
                 <div class="meaning">🧠 ${data.meaning}</div>
             `;
         } catch(e) {
-            resultDiv.innerHTML = '❌ Error: ' + e.message;
+            resultDiv.innerHTML = '<div style="color:#f87171;">❌ Error: ' + e.message + '</div>';
         }
     }
     document.getElementById('name').addEventListener('keypress', function(e) {
