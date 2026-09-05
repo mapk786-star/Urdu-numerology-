@@ -48,17 +48,17 @@ def home():
         .subtitle{text-align:center;color:#666;margin:10px 0 20px}
         input{width:100%;padding:15px;font-size:1.5rem;border:2px solid #ddd;border-radius:15px;margin:10px 0 20px;text-align:right}
         input:focus{outline:none;border-color:#764ba2}
-        button{width:100%;padding:15px;font-size:1.5rem;background:#764ba2;color:white;border:none;border-radius:15px;cursor:pointer}
+        button{width:100%;padding:15px;font-size:1.5rem;background:#764ba2;color:white;border:none;border-radius:15px;cursor:pointer;transition:0.3s}
         button:hover{background:#667eea}
         .result{background:#f8f9fa;border-radius:15px;padding:20px;margin-top:20px;font-size:1.2rem;display:none}
         .result.show{display:block}
         .total{font-size:3rem;color:#764ba2;text-align:center;font-weight:bold}
         .details{line-height:2;padding:10px 0}
         .meaning{background:#e8f5e9;padding:15px;border-radius:10px;margin-top:10px}
-        .whatsapp-btn{background:#25D366;color:white;padding:12px;border-radius:10px;text-decoration:none;display:block;text-align:center;margin-top:15px;font-size:1.2rem}
+        .whatsapp-btn{background:#25D366;color:white;padding:12px;border-radius:10px;text-decoration:none;display:block;text-align:center;margin-top:15px;font-size:1.2rem;transition:0.3s}
         .whatsapp-btn:hover{background:#128C7E}
         .share-buttons{display:flex;gap:10px;margin-top:15px;flex-wrap:wrap}
-        .share-btn{flex:1;padding:10px;border:none;border-radius:10px;color:white;cursor:pointer;font-size:0.9rem;text-align:center}
+        .share-btn{flex:1;padding:10px;border:none;border-radius:10px;color:white;cursor:pointer;font-size:0.9rem;text-align:center;transition:0.3s}
         .share-btn:hover{transform:scale(1.05)}
         .share-whatsapp{background:#25D366}
         .share-facebook{background:#1877F2}
@@ -111,17 +111,24 @@ def home():
         if(e.key === 'Enter') calculate();
     });
     function shareWhatsApp() {
-        window.open('https://wa.me/923120497193?text=' + encodeURIComponent('🔮 اپنا عدد نام چیک کریں! ' + window.location.href));
+        const url = window.location.href;
+        window.open('https://wa.me/923120497193?text=' + encodeURIComponent('🔮 اپنا عدد نام چیک کریں! ' + url), '_blank');
     }
     function shareFacebook() {
-        window.open('https://facebook.com/sharer/sharer.php?u=' + encodeURIComponent(window.location.href));
+        const url = window.location.href;
+        window.open('https://www.facebook.com/sharer/sharer.php?u=' + encodeURIComponent(url), '_blank');
     }
     function shareTwitter() {
-        window.open('https://twitter.com/intent/tweet?text=' + encodeURIComponent('🔮 اپنا عدد نام چیک کریں! ' + window.location.href));
+        const url = window.location.href;
+        window.open('https://twitter.com/intent/tweet?text=' + encodeURIComponent('🔮 اپنا عدد نام چیک کریں!') + '&url=' + encodeURIComponent(url), '_blank');
     }
     function copyLink() {
-        navigator.clipboard.writeText(window.location.href);
-        alert('✅ لنک کاپی ہو گیا!');
+        const url = window.location.href;
+        navigator.clipboard.writeText(url).then(function() {
+            alert('✅ لنک کاپی ہو گیا!');
+        }).catch(function() {
+            alert('❌ لنک کاپی کرنے میں مشکل ہو رہی ہے');
+        });
     }
     </script>
     </body>
