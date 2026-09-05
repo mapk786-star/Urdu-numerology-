@@ -45,6 +45,43 @@ compatibility = {
     7: "1, 3, 5, 9", 8: "2, 4, 6, 8", 9: "1, 3, 5, 9"
 }
 
+english_values = {
+    'a':1,'b':2,'c':3,'d':4,'e':5,'f':6,'g':7,'h':8,'i':9,
+    'j':1,'k':2,'l':3,'m':4,'n':5,'o':6,'p':7,'q':8,'r':9,
+    's':1,'t':2,'u':3,'v':4,'w':5,'x':6,'y':7,'z':8
+}
+english_meanings = {
+    1: "Leader — Confident, ambitious, independent",
+    2: "Peacemaker — Diplomatic, sensitive, cooperative",
+    3: "Creative — Expressive, joyful, artistic",
+    # ... up to 9
+}
+
+english_lucky = {
+    1: {"day": "Sunday, Friday", "color": "Red, Orange", "gem": "Ruby", "numbers": "1,10,19,28", "business": "Leadership roles"},
+    # ... up to 9
+    @app.route('/api/english/<name>')
+def api_english(name):
+    details, total, meaning = calculate(name, 'english')
+    return jsonify({'details': details, 'total': total, 'meaning': meaning})
+    def calculate(name, system='urdu'):
+    total = 0
+    details = []
+    values = abjad if system == 'urdu' else english_values
+    
+    for char in name.lower() if system == 'english' else name:
+        val = values.get(char, 0)
+        if val > 0:
+            details.append(f"{char} = {val}")
+            total += val
+    
+    # Reduce to single digit
+    while total > 9 and total not in [11, 22, 33]:
+        total = sum(int(d) for d in str(total))
+    
+    meaning = english_meanings.get(total, "Special number!") if system == 'english' else meanings.get(total, "خاص عدد — آپ منفرد ہیں!")
+    return details, total, meaning
+}
 def calculate(name):
     total = 0
     details = []
@@ -205,7 +242,26 @@ def home():
     </body>
     </html>
     '''
+    <div style="display:flex;gap:10px;margin:10px 0;justify-content:center;">
+    <button onclick="setLanguage('urdu')" id="urduBtn" style="padding:8px 20px;background:#7c3aed;color:white;border:none;border-radius:10px;cursor:pointer;">🇵🇰 اردو</button>
+    <button onclick="setLanguage('english')" id="engBtn" style="padding:8px 20px;background:#333;color:white;border:none;border-radius:10px;cursor:pointer;">🇬🇧 English</button>
+</div>
+let currentLang = 'urdu';
 
+function setLanguage(lang) {
+    currentLang = lang;
+    document.getElementById('urduBtn').style.background = lang === 'urdu' ? '#7c3aed' : '#333';
+    document.getElementById('engBtn').style.background = lang === 'english' ? '#7c3aed' : '#333';
+    document.getElementById('name').placeholder = lang === 'urdu' ? 'مثال: علی' : 'Example: Ali';
+    document.querySelector('.subtitle').textContent = lang === 'urdu' ? 'اپنا نام لکھیں اور اپنا عدد معلوم کریں' : 'Enter your name to find your number';
+    document.querySelector('button[onclick="calculate()"]').textContent = lang === 'urdu' ? '🔮 شمار کریں' : '🔮 Calculate';
+}
+
+async function calculate() {
+    const name = document.getElementById('name').value.trim();
+    if(!name) { alert(currentLang === 'urdu' ? 'براہ کرم نام لکھیں' : 'Please enter a name'); return; }
+    // ... rest of function with currentLang in API call
+}
 @app.route('/api/<name>')
 def api(name):
     details, total, meaning = calculate(name)
